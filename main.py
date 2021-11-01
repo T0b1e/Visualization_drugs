@@ -2,15 +2,18 @@ from tkinter import font
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
 import requests
 from tkinter import *
 from tkinter import messagebox
 
 root = Tk()
-root.geometry('500x200+500+100')
+root.geometry('500x300+500+100')
 root.resizable(False, False)
 root.title('Visualization Data')
 root.iconbitmap('Data.ico')
+
+FONT = "TH Sarabun PSK", 16
 
 def all_province():
 
@@ -73,28 +76,47 @@ def all_province():
             else:
                 avg = 0
 
-            a = Label(root, text=f'Average : {round(avg, 3)}',font=18).place(x=240, y=60)
-            ma = Label(root, text=f'Max Value : {max(sub_case)}',font=18).place(x=240, y=80)
-            mi = Label(root, text=f'Min Value : {min(sub_case)}',font=18).place(x=240, y=100)
+            a = Label(root, text=f'Average : {round(avg, 3)}',font=FONT).place(x=30, y=150)
+            ma = Label(root, text=f'Max Value : {max(sub_case)}',font=FONT).place(x=30, y=180)
+            mi = Label(root, text=f'Min Value : {min(sub_case)}',font=FONT).place(x=30, y=210)
             
             plt.bar(name, sub_case)
             plt.show()
 
     return None
 
+def source():
+    widget2 = Tk()
+    widget2.geometry('500x300+500+100')
+    widget2.resizable(False, False)
+    widget2.title('Source Data')
+    widget2.iconbitmap('Data.ico')
+    Label(widget2, text="เนื้อหามีข้อมูลมาจาก  ข้อมูลเปิดภาครัฐ สำนักงาน ป.ป.ส. ช่วงปี 2557-2563",font=FONT).pack()
+    Label(widget2, text="ปรเภทข้อมูล API",font=FONT).pack()
+    Label(widget2, text="ที่มาและความสำคัญ : Data.go.ac.th",font=FONT).pack()
+
+sub_menu = Menu()
+sub_menu.add_command(label='Source', command=source)
+sub_menu.add_command(label='About')
+
+main_menu = Menu()
+root.config(menu=main_menu)
+main_menu.add_cascade(label='Documentation', menu=sub_menu)
+
+
 avg = 0
 
 l = Label(root, text='Data Visualization Thailand about news',font=28)
 
-y = Label(root, text='ปี',font=18)
-s = Label(root, text='จังหวัด',font=18)
+y = Label(root, text='ปี',font=FONT)
+s = Label(root, text='จังหวัด',font=FONT)
 
 provinces = StringVar()
-p = Entry(root, textvariable=provinces, justify=CENTER,font=18)
+p = Entry(root, textvariable=provinces, justify=CENTER,font=FONT)
 
 year = IntVar()
-e = Entry(root, textvariable=year, justify=CENTER,font=18)
-b = Button(root,text='Enter', command=all_province,font=18)
+e = Entry(root, textvariable=year, justify=CENTER,font=FONT)
+b = Button(root,text='Enter', command=all_province,font=FONT)
 
 l.pack()
 s.place(x=10, y=60)
