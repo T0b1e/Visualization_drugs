@@ -1,10 +1,10 @@
-from tkinter import font
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
 import requests
 from tkinter import *
+from tkinter import ttk
 from tkinter import messagebox
 from province import change_name
 
@@ -19,19 +19,13 @@ FONT = "TH Sarabun PSK", 12
 
 def all_province():
 
-    if not provinces.get() or e.get() == 0:
+    if not provinces.get():
 
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
 
     else:
 
-        try:
-            if int(e.get()) > 2560 and int(e.get()) < 2564:
-                year = e.get()
-            else:
-                messagebox.showwarning('Warning', 'ปีในช่วง พ.ศ. 2560 - 2563')
-        except ValueError:
-            messagebox.showwarning('Warning', 'Year is not string')
+        year = c.get()
 
         response = requests.get(f'https://dataapi.oncb.go.th/suppress/complain/{year}')
         data = response.json()
@@ -123,7 +117,13 @@ main_menu.add_cascade(label='Documentation', menu=sub_menu)
 
 avg = 0
 
+years = (2557, 2558, 2559, 2560, 2561, 2562, 2563)
+
+
 l = Label(root, text='Data Visualization Thailand about news',font=28)
+
+c = ttk.Combobox(root, values=years)
+c.current(6)
 
 s = Label(root, text='จังหวัด',font=FONT)
 y = Label(root, text='ปี (พ.ศ.)',font=FONT)
@@ -139,7 +139,8 @@ l.pack()
 s.place(x=10, y=60)
 y.place(x=10, y=100)
 p.place(x=70, y=60)
-e.place(x=70, y=100)
+#e.place(x=70, y=100)
 b.place(x=280, y=95)
+c.place(x=70, y=100)
 
 root.mainloop()
