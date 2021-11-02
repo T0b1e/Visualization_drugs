@@ -19,9 +19,10 @@ FONT = "TH Sarabun PSK", 12
 
 def all_province():
 
-    if not provinces.get():
+    if not provinces.get() and check_province.get() == False:
 
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
+        
 
     else:
 
@@ -39,22 +40,23 @@ def all_province():
         for b in real_data:
             case.append(b['complainAll'])
 
-        if not provinces.get():
+        if check_province.get() == True or not provinces.get():
 
             plt.bar(province, case)
             plt.show()
+            
         
         else:
 
             array = []
             country = provinces.get()
             try:
+
                 int(country)
                 messagebox.showwarning('Warning', 'ใส่เป็นชื่อจังหวัด')
+
             except ValueError:
                 try:
-                    '''if ',' not in [i for i in country]:
-                        messagebox.showwarning('Warning', 'ใส่ , ขั้นกลางด้วย')'''
 
                     name = country.split(',')
                     if len(name) < 77:
@@ -62,6 +64,7 @@ def all_province():
                             array.append(province.index(str(x)))
                     else:
                         messagebox.showwarning('Warning', 'เกินลิมิตจังหวัด')
+                        
                 except ValueError:
                     messagebox.showwarning('Warning', 'ลองชื่อเต็มของจังหวัดดูสิ')
 
@@ -119,6 +122,8 @@ avg = 0
 
 years = (2557, 2558, 2559, 2560, 2561, 2562, 2563)
 
+check_province = BooleanVar()
+a = ttk.Checkbutton(root, text='ทุกจังหวัด', variable=check_province, onvalue=True, offvalue=False)
 
 l = Label(root, text='Data Visualization Thailand about news',font=28)
 
@@ -139,7 +144,7 @@ l.pack()
 s.place(x=10, y=60)
 y.place(x=10, y=100)
 p.place(x=70, y=60)
-#e.place(x=70, y=100)
+a.pack()
 b.place(x=280, y=95)
 c.place(x=70, y=100)
 
