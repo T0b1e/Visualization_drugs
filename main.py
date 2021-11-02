@@ -1,3 +1,4 @@
+import tkinter
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,75 +18,82 @@ root.iconbitmap('Data.ico')
 
 FONT = "TH Sarabun PSK", 12
 
-def all_province():
+
+def show_data():
+
+    year = c.get()
+
+    try:
+        response = requests.get(f'https://dataapi.oncb.go.th/suppress/complain/{year}')
+        print(year)
+        print(response.status_code)
+        if response.status_code == 200:
+            data_base = response.json()
+            data_set = data_base['data']
+        else:
+            messagebox.showwarning('Warning', 'Server Down')
+
+
+    except ValueError:
+        messagebox.showwarning('Warning', "Can't connect to server anymore")
+
+    province = []
+    for a in data_set:
+        province.append(a['PROV_NAME'])
+
+    case = []
+    for b in data_set:
+        case.append(b['complainAll'])
 
     if not provinces.get() and check_province.get() == False:
 
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
-        
+        summory = 0
+    
+    elif not provinces.get() and check_province.get() == True:  #All data
 
-    else:
+        plt.bar(change_name(province), case)
+        summory = case
+        plt.show()
+    
+    elif provinces.get() and check_province.get() == True:
 
-        year = c.get()
+        messagebox.showwarning('Warning', 'เลือกสักอย่าง')
+        summory = 0
+    
+    elif provinces.get() and check_province.get() == False:  #Selected data
 
-        response = requests.get(f'https://dataapi.oncb.go.th/suppress/complain/{year}')
-        data = response.json()
-        real_data = data['data']
-
-        province = []
-        for a in real_data:
-            province.append(a['PROV_NAME'])
-
-        case = []
-        for b in real_data:
-            case.append(b['complainAll'])
-
-        if check_province.get() == True or not provinces.get():
-
-            plt.bar(province, case)
-            plt.show()
-            
-        
-        else:
-
+        try:
             array = []
-            country = provinces.get()
-            try:
-
-                int(country)
-                messagebox.showwarning('Warning', 'ใส่เป็นชื่อจังหวัด')
-
-            except ValueError:
-                try:
-
-                    name = country.split(',')
-                    if len(name) < 77:
-                        for x in name:
-                            array.append(province.index(str(x)))
-                    else:
-                        messagebox.showwarning('Warning', 'เกินลิมิตจังหวัด')
-                        
-                except ValueError:
-                    messagebox.showwarning('Warning', 'ลองชื่อเต็มของจังหวัดดูสิ')
-
-            new_name = change_name(name)
-
+            for a in (provinces.get()).split(','):
+                array.append(province.index(a))
+            
             sub_case = []
             for x in array:
                 sub_case.append(case[x])
-            
-            global avg
-            if len(name) > 1:
-                avg = sum(sub_case) / len(name)
-            else:
-                avg = 0
 
-            a = Label(root, text=f'Average : {round(avg, 3)}',font=FONT).place(x=200, y=150)
-            ma = Label(root, text=f'Max Value : {max(sub_case)}',font=FONT).place(x=200, y=180)
-            mi = Label(root, text=f'Min Value : {min(sub_case)}',font=FONT).place(x=200, y=210)
-            
-            plt.bar(new_name, sub_case)
+            summory = sub_case
+
+            plt.bar(change_name((provinces.get()).split(',')), sub_case)
             plt.show()
+
+        except ValueError:
+            print(ValueError)
+            messagebox.showwarning('Warning', 'สะกดชื่อเต็มของจังหวัดดูสิ')
+    
+    else:
+
+        messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
+    
+    global avg
+    if len((provinces.get()).split(',')) > 1:
+        avg = sum(summory) / len((provinces.get()).split(','))
+    else:
+        avg = 0
+
+    a = Label(root, text=f'Average : {round(avg, 3)}',font=FONT).place(x=200, y=150)
+    ma = Label(root, text=f'Max Value : {max(summory)}',font=FONT).place(x=200, y=180)
+    mi = Label(root, text=f'Min Value : {min(summory)}',font=FONT).place(x=200, y=210)
 
     return None
 
@@ -117,28 +125,27 @@ main_menu = Menu()
 root.config(menu=main_menu)
 main_menu.add_cascade(label='Documentation', menu=sub_menu)
 
-
 avg = 0
-
-years = (2557, 2558, 2559, 2560, 2561, 2562, 2563)
 
 check_province = BooleanVar()
 a = ttk.Checkbutton(root, text='ทุกจังหวัด', variable=check_province, onvalue=True, offvalue=False)
 
-l = Label(root, text='Data Visualization Thailand about news',font=28)
+l = Label(root, text='Data Visualization Thailand about news', font=28)
+
+s = Label(root, text='จังหวัด', font=FONT)
+y = Label(root, text='ปี (พ.ศ.)', font=FONT)
+
+years = (2557, 2558, 2559, 2560, 2561, 2562, 2563)
 
 c = ttk.Combobox(root, values=years)
 c.current(6)
 
-s = Label(root, text='จังหวัด',font=FONT)
-y = Label(root, text='ปี (พ.ศ.)',font=FONT)
-
 provinces = StringVar()
-p = Entry(root, textvariable=provinces, justify=CENTER,font=FONT)
+p = Entry(root, textvariable=provinces, justify=CENTER, font=FONT)
 
 year = IntVar()
-e = Entry(root, textvariable=year, justify=CENTER,font=FONT)
-b = Button(root,text='Enter', command=all_province,font=FONT)
+e = Entry(root, textvariable=year, justify=CENTER, font=FONT)
+b = Button(root,text='Enter', command=show_data, font=FONT)# give_data
 
 l.pack()
 s.place(x=10, y=60)
