@@ -105,12 +105,23 @@ def show_data():
     else:
         avg = 0
 
+    max_index = summory.index(max(summory))
+    min_index = summory.index(min(summory))
+    print(province[max_index], province[min_index])
+
     av = Label(Frame1, text=f'Average : {round(avg, 5)}',font=FONT).place(x=200, y=150)
-    ma = Label(Frame1, text=f'Max Value : {max(summory)}',font=FONT).place(x=200, y=180)
-    mi = Label(Frame1, text=f'Min Value : {min(summory)}',font=FONT).place(x=200, y=210)
+    ma = Label(Frame1, text=f'Max Value {province[summory.index(max(summory))]} : {max(summory)}',font=FONT).place(x=200, y=180)
+    mi = Label(Frame1, text=f'Min Value {province[summory.index(min(summory))]} : {min(summory)}',font=FONT).place(x=200, y=210)
 
     return None
 
+
+def clear():
+
+    if not p.get():
+        messagebox.showwarning('Warning', 'ไม่มีข้อมูล')
+    else:
+        p.delete(0,"end")
 Label(Frame3, text="เนื้อหามีข้อมูลมาจาก  ข้อมูลเปิดภาครัฐ สำนักงาน ป.ป.ส. ช่วงปี 2557-2563",font=FONT).pack()
 Label(Frame3, text="ประเภทข้อมูล API",font=FONT).pack()
 Label(Frame3, text="ที่มาและความสำคัญ : Data.go.ac.th",font=FONT).pack()
@@ -138,10 +149,9 @@ provinces = StringVar()
 p = Entry(Frame1, textvariable=provinces, justify=CENTER, font=FONT)
 
 year = IntVar()
-e = Entry(Frame1, textvariable=year, justify=CENTER, font=FONT)
-b = Button(Frame1,text='Enter', command=show_data, font=FONT)# give_data
+b = Button(root,text='Enter', command=show_data, font=FONT)# give_data
 
-cl = Button(Frame1,text='Clear', font=FONT)
+cl = Button(root,text='Clear',command=clear, font=FONT)
 
 l.pack()
 s.place(x=10, y=60)
