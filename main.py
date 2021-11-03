@@ -32,6 +32,10 @@ FONT = "TH Sarabun PSK", 12
 
 def show_data():
 
+    average = IntVar()
+    average.set(0)
+    graph.get()
+
     year = c.get()
 
     try:
@@ -62,10 +66,24 @@ def show_data():
     
     elif not provinces.get() and check_province.get() == True:  #All data
 
-        plt.bar(change_name(province), case)
-        plt.show()
         summory = case
         country = province
+
+        plt.title(f'Visualization Data during {year} in Thailand')
+
+        if graph.get() == '1':
+
+            plt.bar(change_name(province), case)
+            plt.show()
+        
+        if graph.get() == '0':
+
+            plt.pie(case, labels=change_name(province))
+            plt.show()
+        
+        else:
+            
+            messagebox.showwarning('Warning', 'เลือกประเภทกราฟก่อน')
         
     elif provinces.get() and check_province.get() == True:
 
@@ -75,6 +93,10 @@ def show_data():
     elif provinces.get() and check_province.get() == False:  #Selected data
 
         country = provinces.get()
+        title_name = change_name((provinces.get()).split(','))
+        
+        name = (provinces.get()).split(',')
+        plt.title(f'Visualization Data during {year} in {title_name}')
 
         try:
             array = []
@@ -87,17 +109,28 @@ def show_data():
 
             summory = sub_case
 
-            plt.bar(change_name((provinces.get()).split(',')), sub_case)
-            plt.show()
+            if graph.get() == '1':
+
+                plt.bar(change_name(name), sub_case)
+                plt.show()
+            
+            if graph.get() == '0':
+
+                plt.pie(sub_case, labels=change_name((provinces.get()).split(',')))
+                plt.show()
+            
+            else:
+                
+                messagebox.showwarning('Warning', 'เลือกประเภทกราฟก่อน')
 
         except ValueError:
-            print(ValueError)
+
             messagebox.showwarning('Warning', 'สะกดชื่อเต็มของจังหวัดดูสิ')
     
     else:
 
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
-    
+
     global avg
 
     if len(country) > 1:
@@ -105,16 +138,15 @@ def show_data():
     else:
         avg = 0
 
-    max_index = summory.index(max(summory))
-    min_index = summory.index(min(summory))
-    print(province[max_index], province[min_index])
+    average.set(round(avg, 5))
 
-    av = Label(Frame1, text=f'Average : {round(avg, 5)}',font=FONT).place(x=200, y=150)
-    ma = Label(Frame1, text=f'Max Value {province[summory.index(max(summory))]} : {max(summory)}',font=FONT).place(x=200, y=180)
-    mi = Label(Frame1, text=f'Min Value {province[summory.index(min(summory))]} : {min(summory)}',font=FONT).place(x=200, y=210)
+    #print(province[case.index(max(summory))], province[case.index(min(summory))])
+
+    Label(Frame1, text=f'Average : {average.get()}',font=FONT).place(x=250, y=150)
+    Label(Frame1, text=f'Max Value {province[case.index(max(summory))]} : {max(summory)}',font=FONT).place(x=250, y=180)  #BUG ลืมไปว่ามันมีค่าที่เท่ากัน
+    Label(Frame1, text=f'Min Value {province[case.index(min(summory))]} : {min(summory)}',font=FONT).place(x=250, y=210)
 
     return None
-
 
 def clear():
 
@@ -122,6 +154,7 @@ def clear():
         messagebox.showwarning('Warning', 'ไม่มีข้อมูล')
     else:
         p.delete(0,"end")
+
 Label(Frame3, text="เนื้อหามีข้อมูลมาจาก  ข้อมูลเปิดภาครัฐ สำนักงาน ป.ป.ส. ช่วงปี 2557-2563",font=FONT).pack()
 Label(Frame3, text="ประเภทข้อมูล API",font=FONT).pack()
 Label(Frame3, text="ที่มาและความสำคัญ : Data.go.ac.th",font=FONT).pack()
@@ -149,9 +182,13 @@ provinces = StringVar()
 p = Entry(Frame1, textvariable=provinces, justify=CENTER, font=FONT)
 
 year = IntVar()
-b = Button(root,text='Enter', command=show_data, font=FONT)# give_data
+b = Button(Frame1,text='Enter', command=show_data, font=FONT)# give_data
 
-cl = Button(root,text='Clear',command=clear, font=FONT)
+cl = Button(Frame1,text='Clear',command=clear, font=FONT)
+
+graph = StringVar()
+g1 = ttk.Radiobutton(Frame1, text='Bar Graph', value=True, variable=graph)  # 1
+g2 =ttk.Radiobutton(Frame1, text='Pie Chart', value=False, variable=graph)  # 0
 
 l.pack()
 s.place(x=10, y=60)
@@ -161,5 +198,7 @@ a.pack()
 b.place(x=280, y=95)
 cl.place(x=280, y=55)
 c.place(x=70, y=100)
+g1.place(x=70, y=140)
+g2.place(x=160, y=140)
 
 root.mainloop()
