@@ -1,5 +1,7 @@
 import tkinter
 import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
 
 import requests
 from tkinter import *
@@ -29,6 +31,15 @@ tab.pack(expand=True, fill="both")
 
 FONT = "TH Sarabun PSK", 12
 
+tree = ttk.Treeview(Frame2)  #TODO
+tree['columns'] = ('Static', 'Value')
+tree.column('#0', width=0, stretch=NO)
+tree.column('Static', anchor=CENTER, width=100)
+tree.column('Value',anchor=CENTER, width=100)
+
+tree.heading('#0', text="", anchor=CENTER)
+tree.heading('Static', text="Static", anchor=CENTER)
+tree.heading('Value', text="Value", anchor=CENTER)
 
 def show_data():
 
@@ -59,6 +70,11 @@ def show_data():
     for b in data_set:
         case.append(b['complainAll'])
 
+    All = []
+    for d in range(1,77):
+        All.append(province)
+        All.append(case)
+    
     if not provinces.get() and check_province.get() == False:
 
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
@@ -131,20 +147,36 @@ def show_data():
 
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
 
-    global avg
+    global mean
 
     if len(country) > 1:
-        avg = sum(summory) / len(country)
+        mean = sum(summory) / len(country)
     else:
-        avg = 0
+        mean = 0
 
-    average.set(round(avg, 5))
+    average.set(round(mean, 5))
 
-    #print(province[case.index(max(summory))], province[case.index(min(summory))])
+    med = (len(country) + 1) / 2
 
-    Label(Frame1, text=f'Average : {average.get()}',font=FONT).place(x=250, y=150)
-    Label(Frame1, text=f'Max Value {province[case.index(max(summory))]} : {max(summory)}',font=FONT).place(x=250, y=180)  #BUG ลืมไปว่ามันมีค่าที่เท่ากัน
-    Label(Frame1, text=f'Min Value {province[case.index(min(summory))]} : {min(summory)}',font=FONT).place(x=250, y=210)
+    max_count = (0, 0) 
+    for x in summory:
+        occurences = summory.count(x)
+        if occurences > max_count[0]:
+            max_count = (occurences, x)
+
+    mode = max_count[1]
+
+    mid_range = (max(summory) + min(summory)) / 2
+
+    tree.insert(parent='', index=0, iid=0, text='', values=('ค่าเฉลี่ยเลขคณิต', str(mean)))
+    tree.insert(parent='', index=1, iid=1, text='', values=('ค่ามัธยฐาน', str(med)))
+    tree.insert(parent='', index=2, iid=2, text='', values=('ฐานนิยม', str(mode)))
+    tree.insert(parent='', index=3, iid=3, text='', values=('ค่ากึ่งกลางพิสัย', str(mid_range)))
+    tree.insert(parent='', index=4, iid=4, text='', values=('ค่าสูงสุด', str(max(summory))))
+    tree.insert(parent='', index=5, iid=5, text='', values=('ค่าต่ำสุด', str(min(summory))))
+
+    tree.pack()
+
 
     return None
 
@@ -162,8 +194,9 @@ Label(Frame3, text="ที่มาและความสำคัญ : Data.g
 Label(Frame4, text="Deleloper นาย ณรงค์กร กิจรุ่งโรจน์",font=FONT).pack()
 Label(Frame4, text="Sorce code : https://github.com/T0b1e/Visualization_drugs",font=FONT).pack()
 Label(Frame4, text="Data source : https://data.go.th/",font=FONT).pack()
+Label(Frame4, text="Contact me: Email : 3068@psuwit.ac.th\n Facebook : Narongkorn kitrungrot",font=FONT).pack()
 
-avg = 0
+mean = 0
 
 check_province = BooleanVar()
 a = ttk.Checkbutton(Frame1, text='ทุกจังหวัด', variable=check_province, onvalue=True, offvalue=False)
