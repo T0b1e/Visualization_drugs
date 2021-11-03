@@ -94,11 +94,22 @@ def show_data():
     else:
         avg = 0
 
+    max_index = summory.index(max(summory))
+    min_index = summory.index(min(summory))
+    print(province[max_index], province[min_index])
+
     av = Label(root, text=f'Average : {round(avg, 5)}',font=FONT).place(x=200, y=150)
-    ma = Label(root, text=f'Max Value : {max(summory)}',font=FONT).place(x=200, y=180)
-    mi = Label(root, text=f'Min Value : {min(summory)}',font=FONT).place(x=200, y=210)
+    ma = Label(root, text=f'Max Value {province[summory.index(max(summory))]} : {max(summory)}',font=FONT).place(x=200, y=180)
+    mi = Label(root, text=f'Min Value {province[summory.index(min(summory))]} : {min(summory)}',font=FONT).place(x=200, y=210)
 
     return None
+
+def clear():
+
+    if not p.get():
+        messagebox.showwarning('Warning', 'ไม่มีข้อมูล')
+    else:
+        p.delete(0,"end")
 
 def source():
     widget2 = Tk()
@@ -147,10 +158,9 @@ provinces = StringVar()
 p = Entry(root, textvariable=provinces, justify=CENTER, font=FONT)
 
 year = IntVar()
-e = Entry(root, textvariable=year, justify=CENTER, font=FONT)
 b = Button(root,text='Enter', command=show_data, font=FONT)# give_data
 
-cl = Button(root,text='Clear', font=FONT)
+cl = Button(root,text='Clear',command=clear, font=FONT)
 
 l.pack()
 s.place(x=10, y=60)
