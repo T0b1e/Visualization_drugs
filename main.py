@@ -25,8 +25,7 @@ def show_data():
 
     try:
         response = requests.get(f'https://dataapi.oncb.go.th/suppress/complain/{year}')
-        print(year)
-        print(response.status_code)
+        print("Server online")
         if response.status_code == 200:
             data_base = response.json()
             data_set = data_base['data']
@@ -48,20 +47,23 @@ def show_data():
     if not provinces.get() and check_province.get() == False:
 
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
-        summory = 0
+        summory = [0]
     
     elif not provinces.get() and check_province.get() == True:  #All data
 
         plt.bar(change_name(province), case)
-        summory = case
         plt.show()
-    
+        summory = case
+        country = province
+        
     elif provinces.get() and check_province.get() == True:
 
         messagebox.showwarning('Warning', 'เลือกสักอย่าง')
-        summory = 0
+        summory = [0]
     
     elif provinces.get() and check_province.get() == False:  #Selected data
+
+        country = provinces.get()
 
         try:
             array = []
@@ -86,12 +88,13 @@ def show_data():
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
     
     global avg
-    if len((provinces.get()).split(',')) > 1:
-        avg = sum(summory) / len((provinces.get()).split(','))
+
+    if len(country) > 1:
+        avg = sum(summory) / len(country)
     else:
         avg = 0
 
-    a = Label(root, text=f'Average : {round(avg, 3)}',font=FONT).place(x=200, y=150)
+    av = Label(root, text=f'Average : {round(avg, 5)}',font=FONT).place(x=200, y=150)
     ma = Label(root, text=f'Max Value : {max(summory)}',font=FONT).place(x=200, y=180)
     mi = Label(root, text=f'Min Value : {min(summory)}',font=FONT).place(x=200, y=210)
 
@@ -147,12 +150,15 @@ year = IntVar()
 e = Entry(root, textvariable=year, justify=CENTER, font=FONT)
 b = Button(root,text='Enter', command=show_data, font=FONT)# give_data
 
+cl = Button(root,text='Clear', font=FONT)
+
 l.pack()
 s.place(x=10, y=60)
 y.place(x=10, y=100)
 p.place(x=70, y=60)
 a.pack()
 b.place(x=280, y=95)
+cl.place(x=280, y=55)
 c.place(x=70, y=100)
 
 root.mainloop()
