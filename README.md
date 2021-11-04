@@ -16,6 +16,7 @@ You can also choose Pie chart or Bar and you can see stat result in static tab
 
 ### Table
 |stat|value|
+|----|-----|
 |ค่าเฉลี่ยเลขคณิต|0|
 |ค่ามัธยฐาน|0|
 |ฐานนิยม|0|
