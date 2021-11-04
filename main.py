@@ -150,13 +150,15 @@ def show_data():
     global mean
 
     if len(country) > 1:
-        mean = sum(summory) / len(country)
+        mean = round((sum(summory) / len(country)), 3)
     else:
         mean = 0
 
     average.set(round(mean, 5))
 
     med = (len(country) + 1) / 2
+
+    sd = round(((sum((x - mean)**2 for x in summory) / len(summory)) ** 0.5), 3)
 
     max_count = (0, 0) 
     for x in summory:
@@ -168,12 +170,13 @@ def show_data():
 
     mid_range = (max(summory) + min(summory)) / 2
 
-    tree.insert(parent='', index=0, iid=0, text='', values=('ค่าเฉลี่ยเลขคณิต', str(mean)))
-    tree.insert(parent='', index=1, iid=1, text='', values=('ค่ามัธยฐาน', str(med)))
-    tree.insert(parent='', index=2, iid=2, text='', values=('ฐานนิยม', str(mode)))
-    tree.insert(parent='', index=3, iid=3, text='', values=('ค่ากึ่งกลางพิสัย', str(mid_range)))
-    tree.insert(parent='', index=4, iid=4, text='', values=('ค่าสูงสุด', str(max(summory))))
-    tree.insert(parent='', index=5, iid=5, text='', values=('ค่าต่ำสุด', str(min(summory))))
+    tree.insert(parent='', index=0, iid=0, text='', values=('ส่วนเบี่ยงเบนมาตรฐาน', str(sd)))
+    tree.insert(parent='', index=1, iid=1, text='', values=('ค่าเฉลี่ยเลขคณิต', str(mean)))
+    tree.insert(parent='', index=2, iid=2, text='', values=('ค่ามัธยฐาน', str(med)))
+    tree.insert(parent='', index=3, iid=3, text='', values=('ฐานนิยม', str(mode)))
+    tree.insert(parent='', index=4, iid=4, text='', values=('ค่ากึ่งกลางพิสัย', str(mid_range)))
+    tree.insert(parent='', index=5, iid=5, text='', values=('ค่าสูงสุด', str(max(summory))))
+    tree.insert(parent='', index=6, iid=6, text='', values=('ค่าต่ำสุด', str(min(summory))))
 
     tree.pack()
 
@@ -191,7 +194,7 @@ Label(Frame3, text="เนื้อหามีข้อมูลมาจาก
 Label(Frame3, text="ประเภทข้อมูล API",font=FONT).pack()
 Label(Frame3, text="ที่มาและความสำคัญ : Data.go.ac.th",font=FONT).pack()
 
-Label(Frame4, text="Deleloper นาย ณรงค์กร กิจรุ่งโรจน์",font=FONT).pack()
+Label(Frame4, text="Developer นาย ณรงค์กร กิจรุ่งโรจน์",font=FONT).pack()
 Label(Frame4, text="Sorce code : https://github.com/T0b1e/Visualization_drugs",font=FONT).pack()
 Label(Frame4, text="Data source : https://data.go.th/",font=FONT).pack()
 Label(Frame4, text="Contact me: Email : 3068@psuwit.ac.th\n Facebook : Narongkorn kitrungrot",font=FONT).pack()
