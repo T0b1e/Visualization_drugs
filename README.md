@@ -15,7 +15,8 @@ You can also choose Pie chart or Bar and you can see stat result in static tab
 4. Enter 
 
 ### Table
-|stat|value|
+Includes: ค่าเฉลี่ยเลขคณิต(mean), ค่ามัธยฐาน(med), ฐานนิยม(mode), กึ่งกลางพิสัย(mid_range), ค่าสูงสุด(max), ค่าต่ำสุด(min)
+|stat|value| 
 |----|-----|
 |ค่าเฉลี่ยเลขคณิต|0|
 |ค่ามัธยฐาน|0|
