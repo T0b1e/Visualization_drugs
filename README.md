@@ -5,4 +5,4 @@
 Using tkinter module for UI elemnet and use matpotlib to expand data
 
 # Example program
-!['Home'](.docs/image/home1.png)
+!['Home'](docs/image/home1.png)
