@@ -24,3 +24,9 @@ Includes: ค่าเฉลี่ยเลขคณิต(mean), ค่าม�
 |กึ่งกลางพิสัย|0|
 |ค่าสูงสุด|0|
 |ค่าต่ำสุด|0|
+
+## Next version 
+1. Reduce Error and Bug
+2. More stable
+3. ready to use
+4. prepare for another data ex. drugs type
