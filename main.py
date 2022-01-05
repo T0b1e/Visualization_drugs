@@ -80,7 +80,7 @@ def show_data():
         messagebox.showwarning('Warning', 'กรอกข้อมูลก่อนน')
         summory = [0]
     
-    elif not provinces.get() and check_province.get() == True:  #All data
+    if not provinces.get() and check_province.get() == True:  #All data
 
         summory = case
         country = province
@@ -101,12 +101,12 @@ def show_data():
             
             messagebox.showwarning('Warning', 'เลือกประเภทกราฟก่อน')
         
-    elif provinces.get() and check_province.get() == True:
+    if provinces.get() and check_province.get() == True:
 
         messagebox.showwarning('Warning', 'เลือกสักอย่าง')
         summory = [0]
     
-    elif provinces.get() and check_province.get() == False:  #Selected data
+    if provinces.get() and check_province.get() == False:  #Selected data
 
         country = provinces.get()
         title_name = change_name((provinces.get()).split(','))
@@ -130,9 +130,9 @@ def show_data():
                 plt.bar(change_name(name), sub_case)
                 plt.show()
             
-            if graph.get() == '0':
+            elif graph.get() == '0':
 
-                plt.pie(sub_case, labels=change_name((provinces.get()).split(',')))
+                plt.pie(sub_case, labels=change_name(name))
                 plt.show()
             
             else:
